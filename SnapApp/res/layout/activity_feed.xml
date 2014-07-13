@@ -1,0 +1,80 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#FFFFFF" >
+
+<GridView
+    android:id="@+id/gridview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_above="@+id/button1"
+    android:horizontalSpacing="10dp"
+    android:numColumns="2"
+    android:stretchMode="columnWidth"
+    android:verticalSpacing="10dp" />
+
+        <ProgressBar
+            android:id="@+id/feedProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/gridview"
+            android:layout_alignParentRight="true" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="58dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/button3"
+            android:background="#517fa4"
+            android:drawableTop="@drawable/friendimage"
+            android:onClick="goToFriendsList"
+            android:text=" friends"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@+id/textView1"
+            android:background="#517fa4"
+            android:drawableTop="@drawable/unread"
+            android:onClick="goToSnaps"
+            android:text="unread"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/button5"
+            android:layout_width="70dp"
+            android:layout_height="58dp"
+            android:layout_alignLeft="@+id/textView1"
+            android:layout_below="@+id/gridview"
+            android:background="#517fa4"
+            android:drawableTop="@drawable/downloadimage"
+            android:onClick="viewVids"
+            android:text="vids"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="58dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@+id/button5"
+            android:background="#517fa4"
+            android:drawableTop="@drawable/uploadimage"
+            android:onClick="uploadSomething"
+            android:text="upload"
+            android:textColor="#FFFFFF" />
+
+</RelativeLayout>

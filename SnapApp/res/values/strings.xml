@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">InstaSnap</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_friends_list">FriendsList</string>
+    <string name="title_activity_view_image">ViewImage</string>
+    <string name="title_activity_big_view">BigView</string>
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_friends_snap">FriendsSnapActivity</string>
+    <string name="title_activity_feed">FeedActivity</string>
+    <string name="title_activity_saved_people">SavedPeopleActivity</string>
+    <string name="title_activity_upload_snap">UploadSnapActivity</string>
+    <string name="title_activity_upload_video">UploadVideoActivity</string>
+    <string name="title_activity_view_videos">ViewVideosActivity</string>
+    <string name="title_activity_my_snaps">MySnapsActivity</string>
+    <string name="title_activity_send_to_friends">SendToFriendsActivity</string>
+    <string name="title_activity_popular_page">PopularPageActivity</string>
+
+</resources>

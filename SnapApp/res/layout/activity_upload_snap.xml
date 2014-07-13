@@ -1,0 +1,87 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <ImageView
+        android:id="@+id/uploadImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/uploadButton"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/bg" />
+
+    <EditText
+        android:id="@+id/captionEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/imageView1"
+        android:layout_toLeftOf="@+id/button1"
+        android:hint="Caption.."
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/uploadButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="Upload"
+        android:onClick="upload"
+        android:background="#517fa4"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/button1"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/uploadImageView"
+        android:layout_alignLeft="@+id/uploadButton"
+        android:layout_alignParentRight="true"
+        android:background="#517fa4"
+        android:onClick="preview"
+        android:text="Show\ncaption"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/goToVideoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button1"
+        android:layout_alignParentRight="true"
+        android:text="VIDEO"
+        android:onClick="goToVideo"
+        android:background="#517fa4"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/goToVideoButton"
+        android:layout_alignParentRight="true"
+        android:text="Rotate"
+        android:onClick="rotate"
+        android:background="#517fa4"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button2"
+        android:layout_alignLeft="@+id/button2"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="#517fa4"
+        android:onClick="sendToFriends"
+        android:text="s\ne\nn\nd\n\nt\no\n\nf\nr\ni\ne\nn\nd\ns"
+        android:textColor="#FFFFFF" />
+
+</RelativeLayout>
