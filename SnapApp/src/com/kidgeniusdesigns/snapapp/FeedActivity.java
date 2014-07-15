@@ -30,6 +30,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -212,6 +213,11 @@ public class FeedActivity extends Activity implements OnScrollListener {
 			
 			int numLoading = 0;
 				while (numLoading < 2) {
+					
+					if(SnapData.myStorys==null)
+						Toast.makeText(getApplicationContext(), "unknown error", Toast.LENGTH_SHORT).show();
+					
+					
 					if(nextSnapIndex<SnapData.myStorys.size()){
 					Story s = SnapData.myStorys.get(nextSnapIndex);
 					nextSnapIndex++;

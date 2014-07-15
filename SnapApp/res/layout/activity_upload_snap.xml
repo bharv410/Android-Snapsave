@@ -31,42 +31,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:text="Upload"
+        android:layout_marginTop="3dip"
         android:onClick="upload"
-        android:background="#517fa4"
-        android:textColor="#FFFFFF" />
-
-    <Button
-        android:id="@+id/button1"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/uploadImageView"
-        android:layout_alignLeft="@+id/uploadButton"
-        android:layout_alignParentRight="true"
-        android:background="#517fa4"
-        android:onClick="preview"
-        android:text="Show\ncaption"
-        android:textColor="#FFFFFF" />
-
-    <Button
-        android:id="@+id/goToVideoButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/button1"
-        android:layout_alignParentRight="true"
-        android:text="VIDEO"
-        android:onClick="goToVideo"
-        android:background="#517fa4"
-        android:textColor="#FFFFFF" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/goToVideoButton"
-        android:layout_alignParentRight="true"
-        android:text="Rotate"
-        android:onClick="rotate"
         android:background="#517fa4"
         android:textColor="#FFFFFF" />
 
@@ -89,5 +55,55 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true" />
+
+    <Button
+        android:id="@+id/button1"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/uploadImageView"
+        android:layout_alignLeft="@+id/button2"
+        android:layout_alignParentRight="true"
+        android:background="#517fa4"
+        android:onClick="preview"
+        android:layout_marginTop="3dip"
+        android:text="Small\ntext"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/button4"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button1"
+        android:layout_alignLeft="@+id/button1"
+        android:layout_alignParentRight="true"
+        android:onClick="switchPhoto"
+        android:text="Big\ntext"
+        android:layout_marginTop="3dip"
+        android:background="#517fa4"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button4"
+        android:layout_alignParentRight="true"
+        android:background="#517fa4"
+        android:onClick="rotate"
+        android:text="Rotate"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button2"
+        android:layout_alignParentRight="true"
+        android:background="#517fa4"
+        android:onClick="changeFilter"
+        android:text="Filter"
+        android:textColor="#FFFFFF" />
 
 </RelativeLayout>

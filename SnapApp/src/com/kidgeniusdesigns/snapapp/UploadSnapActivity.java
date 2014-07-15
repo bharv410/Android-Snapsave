@@ -53,6 +53,7 @@ public class UploadSnapActivity extends Activity {
 	Button uploadButton;
 	InterstitialAd interstitial;
 	ProgressBar feedProgressBar;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -273,6 +274,41 @@ public class UploadSnapActivity extends Activity {
 			}
 
 	
+	public Bitmap drawBigTextToBitmap(Context gContext, 
+			  Bitmap bm, 
+			  String gText) {
+			  Resources resources = gContext.getResources();
+			  float scale = resources.getDisplayMetrics().density;
+			  android.graphics.Bitmap.Config bitmapConfig =
+			      bm.getConfig();
+			  if(bitmapConfig == null) {
+			    bitmapConfig = android.graphics.Bitmap.Config.ARGB_8888;
+			  }
+			  Bitmap newBm = bm.copy(bitmapConfig, true);
+			  Canvas canvas = new Canvas(newBm);
+			  
+			  
+			  //set caption text
+			  Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+			  paint.setColor(Color.WHITE);
+			  paint.setTextSize((int) (44 * scale));
+			  paint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
+			  Rect bounds = new Rect();
+			  paint.getTextBounds(gText, 0, gText.length(), bounds);
+			  int x = (newBm.getWidth() - bounds.width())/2;
+			  int y = (newBm.getHeight() + bounds.height())/2;
+			  
+			  
+			  
+			  
+			  
+			  canvas.drawText(gText, x, y, paint);
+			  
+			
+			  
+			  return newBm;
+			}
+	
 	public void preview(View v){
 		picture.setImageBitmap(drawTextToBitmap(getApplicationContext(), 
 				  curBit, 
@@ -381,6 +417,15 @@ public class UploadSnapActivity extends Activity {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void switchPhoto(View v){
+		picture.setImageBitmap(drawBigTextToBitmap(getApplicationContext(), 
+				  curBit, 
+				  captionEditText.getText().toString()));
+	}
+	public void changeFilter(View v){
+		
 	}
 	
 	public void shareWithOther(View v){
