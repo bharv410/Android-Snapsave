@@ -33,6 +33,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import cn.Ragnarok.BitmapFilter;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -49,10 +50,12 @@ public class UploadSnapActivity extends Activity {
 	Uri currImageURI;
 	ImageView picture;
 	EditText captionEditText;
-	Bitmap curBit;
+	Bitmap curBit, forBackToOriginal;
 	Button uploadButton;
 	InterstitialAd interstitial;
 	ProgressBar feedProgressBar;
+	
+	int currentFilter;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +73,9 @@ public class UploadSnapActivity extends Activity {
 		picture=(ImageView)findViewById(R.id.uploadImageView);
 		captionEditText=(EditText)findViewById(R.id.captionEditText);
 		captionEditText.setClickable(false);
+		
+		currentFilter=0;
+		
 		
 		setupPhotoOrVidDialog();
 				
@@ -103,16 +109,16 @@ public class UploadSnapActivity extends Activity {
 		toast.show();
 		
 		
-		String caption;
-		if(captionEditText.getText().toString().length()>1){
-			caption=captionEditText.getText().toString();
-		}else{
-			caption=" ";
-		}
-		curBit=drawTextToBitmap(getApplicationContext(), 
-				  curBit, 
-				  caption);
-		picture.setImageBitmap(curBit);
+//		String caption;
+//		if(captionEditText.getText().toString().length()>1){
+//			caption=captionEditText.getText().toString();
+//		}else{
+//			caption=" ";
+//		}
+////		curBit=drawTextToBitmap(getApplicationContext(), 
+////				  curBit, 
+////				  caption);
+////		picture.setImageBitmap(curBit);
 		
 		//create a file to write bitmap data
 		File f = new File(getFilesDir() + "/image");
@@ -196,7 +202,7 @@ public class UploadSnapActivity extends Activity {
 
 					curBit = Bitmap.createScaledBitmap(bm, width -20,
 							height-20, true);
-				
+					forBackToOriginal=curBit;
 					picture.setImageBitmap(curBit);
 					captionEditText.setClickable(true);
 					String filename = "image";
@@ -310,9 +316,10 @@ public class UploadSnapActivity extends Activity {
 			}
 	
 	public void preview(View v){
-		picture.setImageBitmap(drawTextToBitmap(getApplicationContext(), 
+		curBit=drawTextToBitmap(getApplicationContext(), 
 				  curBit, 
-				  captionEditText.getText().toString()));
+				  captionEditText.getText().toString());
+		picture.setImageBitmap(curBit);
 	}
 	
 	private class UploadSnap extends AsyncTask<String, Void, String> {
@@ -373,6 +380,7 @@ public class UploadSnapActivity extends Activity {
 
 			curBit = Bitmap.createScaledBitmap(curBit, width -20,
 					height-20, true);
+			forBackToOriginal=curBit;
 	      picture.setImageBitmap(curBit);
 		}
 	}
@@ -381,16 +389,16 @@ public class UploadSnapActivity extends Activity {
 	
 	public void sendToFriends(View v){
 		feedProgressBar.setVisibility(ProgressBar.VISIBLE);
-		String caption;
-		if(captionEditText.getText().toString().length()>1){
-			caption=captionEditText.getText().toString();
-		}else{
-			caption=" ";
-		}
-		Bitmap withCaption=drawTextToBitmap(getApplicationContext(), 
-				  curBit, 
-				  caption);
-		picture.setImageBitmap(withCaption);
+//		String caption;
+//		if(captionEditText.getText().toString().length()>1){
+//			caption=captionEditText.getText().toString();
+//		}else{
+//			caption=" ";
+//		}
+//		Bitmap withCaption=drawTextToBitmap(getApplicationContext(), 
+//				  curBit, 
+//				  caption);
+//		picture.setImageBitmap(withCaption);
 		
 		//create a file to write bitmap data
 		SnapData.sendToFriendFile = new File(getFilesDir() + "/image");
@@ -398,7 +406,7 @@ public class UploadSnapActivity extends Activity {
 			SnapData.sendToFriendFile.createNewFile();
 		
 		//Convert bitmap to byte array
-		Bitmap bitmap = withCaption;
+		Bitmap bitmap = curBit;
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		bitmap.compress(CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
 		byte[] bitmapdata = bos.toByteArray();
@@ -420,12 +428,35 @@ public class UploadSnapActivity extends Activity {
 	}
 	
 	public void switchPhoto(View v){
-		picture.setImageBitmap(drawBigTextToBitmap(getApplicationContext(), 
+		curBit=drawBigTextToBitmap(getApplicationContext(), 
 				  curBit, 
-				  captionEditText.getText().toString()));
+				  captionEditText.getText().toString());
+		picture.setImageBitmap(curBit);
 	}
 	public void changeFilter(View v){
+		currentFilter++;
 		
+		if(currentFilter==1)
+		curBit=BitmapFilter.changeStyle(forBackToOriginal, BitmapFilter.GRAY_STYLE, 5);
+		else if(currentFilter==2)
+			curBit=BitmapFilter.changeStyle(forBackToOriginal, BitmapFilter.NEON_STYLE, 5);
+		else if(currentFilter==3)
+			curBit=BitmapFilter.changeStyle(forBackToOriginal, BitmapFilter.INVERT_STYLE, 5);
+		else if(currentFilter==4)
+			curBit=BitmapFilter.changeStyle(forBackToOriginal, BitmapFilter.BLOCK_STYLE, 5);
+		else if(currentFilter==5)
+			curBit=BitmapFilter.changeStyle(forBackToOriginal, BitmapFilter.LIGHT_STYLE, 5);
+		else if(currentFilter==6)
+			curBit=BitmapFilter.changeStyle(forBackToOriginal, BitmapFilter.HDR_STYLE, 5);
+		else if(currentFilter==7)
+			curBit=BitmapFilter.changeStyle(forBackToOriginal, BitmapFilter.SKETCH_STYLE, 5);
+		else if(currentFilter==8)
+			curBit=BitmapFilter.changeStyle(forBackToOriginal, BitmapFilter.GOTHAM_STYLE, 5);
+		else if(currentFilter==9){
+			curBit=forBackToOriginal;
+			currentFilter=0;
+		}
+		picture.setImageBitmap(curBit);
 	}
 	
 	public void shareWithOther(View v){

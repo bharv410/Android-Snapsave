@@ -92,6 +92,7 @@
         android:layout_alignParentRight="true"
         android:background="#517fa4"
         android:onClick="rotate"
+        android:layout_marginTop="3dip"
         android:text="Rotate"
         android:textColor="#FFFFFF" />
 
@@ -102,6 +103,7 @@
         android:layout_above="@+id/button2"
         android:layout_alignParentRight="true"
         android:background="#517fa4"
+        android:layout_marginTop="3dip"
         android:onClick="changeFilter"
         android:text="Filter"
         android:textColor="#FFFFFF" />
