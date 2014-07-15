@@ -1,6 +1,9 @@
 package com.kidgeniusdesigns.snapapp;
 
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -27,9 +30,10 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.habosa.javasnap.Snapchat;
@@ -61,6 +65,11 @@ public class FeedActivity extends Activity implements OnScrollListener {
 		bar.setIcon(new ColorDrawable(getResources().getColor(
 				android.R.color.transparent)));
 		
+		
+					
+				
+		AdView adView = new AdView(this);
+		adView.setAdSize(AdSize.SMART_BANNER);
 		
 		un = getIntent().getStringExtra("username");
 		adapterNotSetYet = true;
@@ -105,6 +114,11 @@ public class FeedActivity extends Activity implements OnScrollListener {
 	public void displayInterstitial() {
 			if (interstitial.isLoaded()) {
 				interstitial.show();
+				// set up ads
+				interstitial = new InterstitialAd(this);
+				interstitial.setAdUnitId("ca-app-pub-4742368221536941/6949454117");
+				AdRequest adRequest = new AdRequest.Builder().build();
+				interstitial.loadAd(adRequest);
 			}
 		}
 
@@ -173,9 +187,15 @@ public class FeedActivity extends Activity implements OnScrollListener {
 				// when view is set increment num of images on screen
 				numOfSnapsOnScreen++;
 				
-				if((numOfSnapsOnScreen==48)){
-					displayInterstitial();
-				}
+				int min = 0;
+				int max = 130;
+
+				Random r = new Random();
+				int rn = r.nextInt(max - min + 1) + min;
+				if(rn==8)
+				displayInterstitial();
+				
+				
 				return v;
 			} catch (Exception e) {
 				e.printStackTrace();

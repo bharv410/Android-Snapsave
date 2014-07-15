@@ -30,8 +30,9 @@ specifying the canonical name, and the value the alias to use instead. -->
 
 <screenName name="com.kidgeniusDesigns.snapapp.UploadSnapActivity">Upload Snap</screenName>
 
-<screenName name="com.kidgeniusDesigns.snapapp.MainActivity">Main Screen</screenName>
+<screenName name="com.kidgeniusDesigns.snapapp.Login.MainActivity">Main Screen</screenName>
 <screenName name="com.kidgeniusDesigns.snapapp.UploadVideoActivity">Upload Video Activity</screenName>
 <screenName name="com.kidgeniusDesigns.snapapp.ViewVideosActivity">View Videos Activity</screenName>
+<screenName name="com.kidgeniusDesigns.snapapp.SendToFriendsActivity">Send To Friends</screenName>
  
 </resources>

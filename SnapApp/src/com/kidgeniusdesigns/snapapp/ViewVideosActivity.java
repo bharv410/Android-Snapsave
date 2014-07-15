@@ -30,6 +30,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
@@ -52,6 +53,8 @@ public class ViewVideosActivity extends Activity {
 	byte[] saveTheseBytes;
 	private InterstitialAd interstitial;
 boolean secondVidClickedYet;
+ProgressBar pgBar;
+Story s;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -64,6 +67,9 @@ boolean secondVidClickedYet;
 		bar.setIcon(new ColorDrawable(getResources().getColor(
 				android.R.color.transparent)));
 		
+		
+		pgBar=(ProgressBar)findViewById(R.id.progressBar9);
+		pgBar.setVisibility(ProgressBar.INVISIBLE);
 		vidCounter = 0;
 		secondVidClickedYet=false;
 		vidSenders = new ArrayList<String>();
@@ -86,6 +92,7 @@ boolean secondVidClickedYet;
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
+				 s = SnapData.videoStorys.get(position);
 				LoadStory getBytes = new LoadStory();
 				getBytes.execute(position);
 			}
@@ -107,50 +114,57 @@ boolean secondVidClickedYet;
 	}
 
 	private class LoadStory extends AsyncTask<Integer, Integer, String> {
-		int position;
 
 		@Override
+	    protected void onPreExecute() {
+	        super.onPreExecute();
+pgBar.setVisibility(ProgressBar.VISIBLE);
+}
+		@Override
 		protected String doInBackground(Integer... index) {
-				position = index[0];
-				Story s = SnapData.videoStorys.get(position);
+				
 				if (s != null) {
 					saveTheseBytes = Snapchat.getStory(s, getIntent()
 							.getStringExtra("username"),
 							SnapData.authTokenSaved);
 					System.out.println("got bytes");
+					if (index[0] < lastIndexOfZipVid) {
+						try {
+							File tempVidFile = new File(getFilesDir() + "/video.zip");
+							FileOutputStream out = new FileOutputStream(tempVidFile);
+							out.write(saveTheseBytes);
+							out.close();
+							File destinationFile = new File(getFilesDir() + "/videos");
+							unzip(tempVidFile.getAbsolutePath(),
+									destinationFile.getAbsolutePath());
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					} else {
+						File tempVidFile = new File(getFilesDir() + "/video.mp4");
+						FileOutputStream out;
+						try {
+							out = new FileOutputStream(tempVidFile);
+							out.write(saveTheseBytes);
+							out.close();
+						} catch (FileNotFoundException e) {
+							e.printStackTrace();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						File destinationFile = new File(getFilesDir() + "/videos");
+						saveToFile(index[0], destinationFile.getAbsolutePath());
+					}
 				}
 			return null;
 		}
 		@Override
 		protected void onPostExecute(String result) {
 			System.out.println("Done");
-			if (position < lastIndexOfZipVid) {
-				try {
-					File tempVidFile = new File(getFilesDir() + "/video.zip");
-					FileOutputStream out = new FileOutputStream(tempVidFile);
-					out.write(saveTheseBytes);
-					out.close();
-					File destinationFile = new File(getFilesDir() + "/videos");
-					unzip(tempVidFile.getAbsolutePath(),
-							destinationFile.getAbsolutePath());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			} else {
-				File tempVidFile = new File(getFilesDir() + "/video.mp4");
-				FileOutputStream out;
-				try {
-					out = new FileOutputStream(tempVidFile);
-					out.write(saveTheseBytes);
-					out.close();
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				File destinationFile = new File(getFilesDir() + "/videos");
-				saveToFile(position, destinationFile.getAbsolutePath());
-			}
+			Toast toast = Toast.makeText(getApplicationContext(),"Saved Video", Toast.LENGTH_LONG);
+			toast.setGravity(Gravity.CENTER, 0, 0);
+			toast.show();
+			pgBar.setVisibility(ProgressBar.GONE);
 			if(secondVidClickedYet)
 			displayInterstitial();
 			else
@@ -247,10 +261,6 @@ boolean secondVidClickedYet;
 
 		System.out.println(filePath);
 		addToGallery(new File(filePath));
-		Toast toast=Toast.makeText(getApplicationContext(), "Saved Video to Gallery. folder 0\nGo To Gallery to view",
-				Toast.LENGTH_LONG);
-		toast.setGravity(Gravity.CENTER, 0, 0);
-		toast.show();
 	}
 
 	public void saveToFile(int index, String destDirectory) {

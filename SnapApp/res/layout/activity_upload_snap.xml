@@ -8,8 +8,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/uploadButton"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:src="@drawable/bg" />
+        android:layout_alignParentTop="true" />
 
     <EditText
         android:id="@+id/captionEditText"
@@ -75,13 +74,20 @@
         android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button2"
         android:layout_alignLeft="@+id/button2"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:background="#517fa4"
         android:onClick="sendToFriends"
-        android:text="s\ne\nn\nd\n\nt\no\n\nf\nr\ni\ne\nn\nd\ns"
+        android:text="send\nto\nsnap\nfriends"
         android:textColor="#FFFFFF" />
+
+    <ProgressBar
+        android:id="@+id/progressBar10"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
 
 </RelativeLayout>

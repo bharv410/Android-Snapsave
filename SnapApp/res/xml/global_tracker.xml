@@ -21,6 +21,12 @@
 
 <string name="com.kidgeniusDesigns.snapapp.UploadSnapActivity">Upload Snap</string>
 
-<string name="com.kidgeniusDesigns.snapapp.MainActivity">Main Screen</string>
-<string name="com.kidgeniusDesigns.snapapp.UploadVideoActivity">Upload VIdn</string>
+<string name="com.kidgeniusDesigns.snapapp.Login.MainActivity">Main Screen</string>
+<string name="com.kidgeniusDesigns.snapapp.UploadVideoActivity">Upload Vid</string>
+
+<string name="com.kidgeniusDesigns.snapapp.ViewVideosActivity">View Vids</string>
+
+<string name="com.kidgeniusDesigns.snapapp.SendToFriendsActivity">Send To Friends</string>
+
+
 </resources>

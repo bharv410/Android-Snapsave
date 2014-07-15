@@ -31,7 +31,7 @@ public class MainActivity extends Activity {
 		username=(EditText)findViewById(R.id.usernameBox);
 		password=(EditText)findViewById(R.id.passwordBox);
 		loginButton=(Button)findViewById(R.id.loginButton);
-		username.setHint("username");
+		username.setHint("snapchat username");
 		getNameAndPw();
 		}
 	@Override

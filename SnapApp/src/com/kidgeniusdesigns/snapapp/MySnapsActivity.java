@@ -1,7 +1,5 @@
 package com.kidgeniusdesigns.snapapp;
 
-import java.util.ArrayList;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
@@ -10,29 +8,25 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 
-import com.habosa.javasnap.Snap;
-import com.habosa.javasnap.Snapchat;
 import com.kidgeniusdesigns.snapapp.helpers.SnapData;
 
 public class MySnapsActivity extends Activity {
 String un;
 MyAdapter adapter;
 GridView gridView;
-ProgressBar pb;
-ArrayList<String> idList;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -43,15 +37,20 @@ ArrayList<String> idList;
 		bar.setIcon(new ColorDrawable(getResources().getColor(
 				android.R.color.transparent)));
 		
-		pb=(ProgressBar)findViewById(R.id.snapsProgressBar);
-		pb.setVisibility(ProgressBar.VISIBLE);
+		
+		
+		if(SnapData.unreadSnapBytes.size()<1){
+			
+			Toast toast = Toast.makeText(this,"No Unread Snaps", Toast.LENGTH_LONG);
+			toast.setGravity(Gravity.CENTER, 0, 0);
+			toast.show();
+			finish();
+		}
+
 		un=getIntent().getStringExtra("username");
 		gridView = (GridView) findViewById(R.id.mySnapsGridView);
-		idList= new ArrayList<String>();
-		LoadSnaps ls= new LoadSnaps();
-		ls.execute();
-		
-		
+		adapter = new MyAdapter(getApplicationContext());
+		gridView.setAdapter(adapter);
 		gridView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View v,int position, long id) {
@@ -125,55 +124,6 @@ ArrayList<String> idList;
 				return null;
 			}
 
-		}
-	}
-
-
-	private class LoadSnaps extends AsyncTask<Integer, Integer, String> {
-		@Override
-		protected String doInBackground(Integer... index) {
-			
-			SnapData.unreadSnapBytes=new ArrayList<byte[]>();
-			for(Snap s:SnapData.yourUnreadSnaps){				
-				if(s.isImage()&&(!idList.contains(s.getId()))){
-					byte[] imageBytes=Snapchat.getSnap(s, un, SnapData.authTokenSaved);
-					SnapData.unreadSnapBytes.add(imageBytes);
-//					ParseFile bigPic = new ParseFile("photo.jpg",imageBytes);
-//					bigPic.saveInBackground();
-//			        ParseObject imgupload = new ParseObject(un +"snaps");
-//			        imgupload.put("Image", bigPic);
-//			        imgupload.put("id", s.getId());
-//			        imgupload.saveInBackground();
-		        System.out.println(s.getSender());
-				}
-			}
-//			ParseQuery<ParseObject> query = ParseQuery.getQuery(un +"snaps");
-//			 query.findInBackground(new FindCallback<ParseObject>() {
-//			     public void done(List<ParseObject> objects, ParseException e) {
-//			         if (e == null) {
-//			        	 for(ParseObject nextSnap:objects){
-//			        		
-//			        		 SnapData.unreadSnapBytes.add(nextSnap.getBytes("Image"));
-//			        		 idList.add(nextSnap.getString("id"));
-//			        	 }
-//			         } else {
-//			             System.out.println("error getting snaps");
-//			         }
-//			     }
-//			 });
-			
-return null;
-		}
-
-		@Override
-		public void onProgressUpdate(Integer... args) {
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-			pb.setVisibility(ProgressBar.GONE);
-			adapter = new MyAdapter(getApplicationContext());
-			gridView.setAdapter(adapter);
 		}
 	}
 }

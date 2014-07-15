@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.habosa.javasnap.Snapchat;
+import com.kidgeniusdesigns.snapapp.helpers.MyApplication;
 import com.kidgeniusdesigns.snapapp.helpers.SnapData;
 import com.kidgeniusdesigns.snapapp.login.Friend;
 
@@ -44,6 +45,7 @@ private TextView textProgress;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		((MyApplication) getApplication()).getTracker(MyApplication.TrackerName.APP_TRACKER);
 		ActionBar bar = getActionBar();
 		bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#517fa4")));
 		bar.setTitle("InstaSnap");
@@ -130,6 +132,7 @@ private TextView textProgress;
 				tst.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL, 0, 0);
 				tst.show();
 			}
+			finish();
 		}
 	}
 	

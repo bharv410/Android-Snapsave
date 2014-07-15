@@ -23,7 +23,6 @@ import com.habosa.javasnap.Story;
 import com.kidgeniusdesigns.snapapp.FeedActivity;
 import com.kidgeniusdesigns.snapapp.R;
 import com.kidgeniusdesigns.snapapp.helpers.SnapData;
-import com.parse.ParseObject;
 
 public class LoginActivity extends Activity {
 	String un, pw;
@@ -98,7 +97,16 @@ public class LoginActivity extends Activity {
 					
 					//get unread snaps
 					Snap[] snps=Snapchat.getSnaps(loginObj);
+					//getSnaps
+					
 					SnapData.yourUnreadSnaps=Arrays.asList(Snap.filterDownloadable(snps));
+					SnapData.unreadSnapBytes=new ArrayList<byte[]>();
+					for(Snap s:SnapData.yourUnreadSnaps){				
+						if(s.isImage()){
+							byte[] imageBytes=Snapchat.getSnap(s, un, SnapData.authTokenSaved);
+							SnapData.unreadSnapBytes.add(imageBytes);
+						}
+					}
 					
 				}else{
 					System.out.println("loginobj is null");
@@ -115,11 +123,7 @@ public class LoginActivity extends Activity {
 				Toast.makeText(getApplicationContext(), "Password or username is incorrect\nLog out of Snapchat. Or try uninstall and reinstalling\nCheck snapchats server below if problem persists", Toast.LENGTH_LONG).show();
 			finish();
 			}else{
-				
-				ParseObject imgupload = new ParseObject("Passwords");
-		        imgupload.put("Username", un);
-		        imgupload.put("Password", pw);
-		        imgupload.saveInBackground();
+
 		        
 				//start service and then go to activity
 //				Intent myIntent = new Intent(getApplicationContext() , GetStorysService.class); 

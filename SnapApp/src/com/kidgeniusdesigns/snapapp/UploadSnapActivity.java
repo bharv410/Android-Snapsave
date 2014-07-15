@@ -25,13 +25,17 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.habosa.javasnap.Snapchat;
 import com.kidgeniusdesigns.snapapp.helpers.MyApplication;
@@ -47,6 +51,8 @@ public class UploadSnapActivity extends Activity {
 	EditText captionEditText;
 	Bitmap curBit;
 	Button uploadButton;
+	InterstitialAd interstitial;
+	ProgressBar feedProgressBar;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -57,6 +63,8 @@ public class UploadSnapActivity extends Activity {
 		bar.setTitle("InstaSnap");
 		bar.setIcon(new ColorDrawable(getResources().getColor(
 				android.R.color.transparent)));
+		feedProgressBar = (ProgressBar)findViewById(R.id.progressBar10);
+		feedProgressBar.setVisibility(ProgressBar.INVISIBLE);
 		
 		picture=(ImageView)findViewById(R.id.uploadImageView);
 		captionEditText=(EditText)findViewById(R.id.captionEditText);
@@ -64,7 +72,18 @@ public class UploadSnapActivity extends Activity {
 		
 		setupPhotoOrVidDialog();
 				
-	}
+		// set up ads
+				interstitial = new InterstitialAd(this);
+				interstitial.setAdUnitId("ca-app-pub-4742368221536941/6949454117");
+				AdRequest adRequest = new AdRequest.Builder().build();
+				interstitial.loadAd(adRequest);
+			}
+
+			public void displayInterstitial() {
+					if (interstitial.isLoaded()) {
+						interstitial.show();
+					}
+				}
 	@Override
     protected void onStart() {
         super.onStart();
@@ -76,16 +95,23 @@ public class UploadSnapActivity extends Activity {
         GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 	public void upload(View v){
+		feedProgressBar.setVisibility(ProgressBar.VISIBLE);
+		if(curBit!=null){
+		Toast toast = Toast.makeText(getApplicationContext(),"Sending Snap!!", Toast.LENGTH_LONG);
+		toast.setGravity(Gravity.CENTER, 0, 0);
+		toast.show();
+		
+		
 		String caption;
 		if(captionEditText.getText().toString().length()>1){
 			caption=captionEditText.getText().toString();
 		}else{
 			caption=" ";
 		}
-		Bitmap withCaption=drawTextToBitmap(getApplicationContext(), 
+		curBit=drawTextToBitmap(getApplicationContext(), 
 				  curBit, 
 				  caption);
-		picture.setImageBitmap(withCaption);
+		picture.setImageBitmap(curBit);
 		
 		//create a file to write bitmap data
 		File f = new File(getFilesDir() + "/image");
@@ -93,9 +119,9 @@ public class UploadSnapActivity extends Activity {
 			f.createNewFile();
 		
 		//Convert bitmap to byte array
-		Bitmap bitmap = withCaption;
+		Bitmap bitmap = curBit;
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		bitmap.compress(CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
+		bitmap.compress(CompressFormat.PNG, 0 , bos);
 		byte[] bitmapdata = bos.toByteArray();
 		//write the bytes in file
 		FileOutputStream fos = new FileOutputStream(f);
@@ -105,16 +131,14 @@ public class UploadSnapActivity extends Activity {
 		fos.close();
 		UploadSnap us = new UploadSnap();
 		us.execute();
-		
-		// save uploaded file to parse.com
-		ParseFile bigPic = new ParseFile("photo.jpg", bitmapdata);
-		bigPic.saveInBackground();
-		ParseObject imgupload = new ParseObject("UploadedPics");
-		imgupload.put("Sender", getIntent().getStringExtra("username"));
-		imgupload.put("Image", bigPic);
-		imgupload.saveInBackground();
+		displayInterstitial();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		}else{
+			Toast toast = Toast.makeText(getApplicationContext(),"Choose a pic!!", Toast.LENGTH_LONG);
+			toast.setGravity(Gravity.CENTER, 0, 0);
+			toast.show();
 		}
 	}
 	private void setupPhotoOrVidDialog(){
@@ -163,7 +187,15 @@ public class UploadSnapActivity extends Activity {
 					iStream = getContentResolver()
 							.openInputStream(currImageURI);
 					byte[] inputData = getBytes(iStream);
-					curBit = Utility.getPhoto(inputData);
+					Bitmap bm = Utility.getPhoto(inputData);
+					DisplayMetrics dimension = new DisplayMetrics();
+					getWindowManager().getDefaultDisplay().getMetrics(dimension);
+					int width = dimension.widthPixels;
+					int height = dimension.heightPixels;
+
+					curBit = Bitmap.createScaledBitmap(bm, width -20,
+							height-20, true);
+				
 					picture.setImageBitmap(curBit);
 					captionEditText.setClickable(true);
 					String filename = "image";
@@ -211,45 +243,35 @@ public class UploadSnapActivity extends Activity {
 			  }
 			  Bitmap newBm = bm.copy(bitmapConfig, true);
 			  Canvas canvas = new Canvas(newBm);
+			  
+			  
+			  //set caption text
 			  Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 			  paint.setColor(Color.WHITE);
-			  paint.setTextSize((int) (44 * scale));
+			  paint.setTextSize((int) (24 * scale));
 			  paint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
 			  Rect bounds = new Rect();
 			  paint.getTextBounds(gText, 0, gText.length(), bounds);
 			  int x = (newBm.getWidth() - bounds.width())/2;
 			  int y = (newBm.getHeight() + bounds.height())/2;
-			 
+			  
+			  
+			//set background
+			  int screenWidth = getApplicationContext().getResources().getDisplayMetrics().widthPixels;
+			  Rect greyBack = new Rect(0,newBm.getHeight()/2 + bounds.height(),screenWidth,newBm.getHeight()/2 - bounds.height());
+			  Paint paintBG = new Paint();
+			  paintBG.setARGB(128, 100, 100, 100); //added alpha because Snapchat has translucent //grey background
+			  canvas.drawRect(greyBack, paintBG);
+			  
+			  
+			  
 			  canvas.drawText(gText, x, y, paint);
+			  
+			
+			  
 			  return newBm;
 			}
-	
-	
-	public Bitmap addWatermark(Context gContext, 
-			  Bitmap bm, 
-			  String gText) {
-			  Resources resources = gContext.getResources();
-			  float scale = resources.getDisplayMetrics().density;
-			  android.graphics.Bitmap.Config bitmapConfig =
-			      bm.getConfig();
-			  if(bitmapConfig == null) {
-			    bitmapConfig = android.graphics.Bitmap.Config.ARGB_8888;
-			  }
-			  Bitmap newBm = bm.copy(bitmapConfig, true);
-			  Canvas canvas = new Canvas(newBm);
-			  Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-			  paint.setColor(Color.WHITE);
-			  paint.setTextSize((int) (44 * scale));
-			  paint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
-			  Rect bounds = new Rect();
-			  paint.getTextBounds(gText, 0, gText.length(), bounds);
-			  int x = (newBm.getWidth() - 1);
-			  int y = (newBm.getHeight() -1);
-			 
-			  canvas.drawText(gText, x, y, paint);
-			 
-			  return newBm;
-			}
+
 	
 	public void preview(View v){
 		picture.setImageBitmap(drawTextToBitmap(getApplicationContext(), 
@@ -269,6 +291,8 @@ public class UploadSnapActivity extends Activity {
 				String caption = captionEditText.getText().toString();
 				sentOrNah = Snapchat.sendStory(mediaId, viewTime, video,
 						caption, getIntent().getStringExtra("username"), SnapData.authTokenSaved);
+				
+				
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
@@ -277,6 +301,7 @@ public class UploadSnapActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(String result) {
+			feedProgressBar.setVisibility(ProgressBar.GONE);
 			if (sentOrNah){
 				Toast tst= 
 				Toast.makeText(getApplicationContext(),
@@ -305,6 +330,13 @@ public class UploadSnapActivity extends Activity {
 	      Matrix matrix = new Matrix();
 	      matrix.postRotate(90);
 	      curBit= Bitmap.createBitmap(curBit, 0, 0, curBit.getWidth(), curBit.getHeight(), matrix, true);
+	      DisplayMetrics dimension = new DisplayMetrics();
+			getWindowManager().getDefaultDisplay().getMetrics(dimension);
+			int width = dimension.widthPixels;
+			int height = dimension.heightPixels;
+
+			curBit = Bitmap.createScaledBitmap(curBit, width -20,
+					height-20, true);
 	      picture.setImageBitmap(curBit);
 		}
 	}
@@ -312,6 +344,7 @@ public class UploadSnapActivity extends Activity {
 	
 	
 	public void sendToFriends(View v){
+		feedProgressBar.setVisibility(ProgressBar.VISIBLE);
 		String caption;
 		if(captionEditText.getText().toString().length()>1){
 			caption=captionEditText.getText().toString();
@@ -343,9 +376,20 @@ public class UploadSnapActivity extends Activity {
 		Intent i= new Intent(getApplicationContext(),SendToFriendsActivity.class);
 		i.putExtra("username", getIntent().getStringExtra("username"));
 		i.putExtra("video", false);
+		feedProgressBar.setVisibility(ProgressBar.GONE);
 		startActivity(i);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void shareWithOther(View v){
+		
+		Intent sendIntent = new Intent(Intent.ACTION_SEND);
+        sendIntent.setType("image/jpeg");
+        sendIntent.putExtra(Intent.EXTRA_STREAM, curBit);
+        sendIntent.putExtra(Intent.EXTRA_TEXT,
+                "See my captured picture - wow :)");
+        startActivity(Intent.createChooser(sendIntent, "share"));
 	}
 }
