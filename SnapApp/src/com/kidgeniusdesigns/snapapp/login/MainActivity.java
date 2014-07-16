@@ -8,8 +8,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +23,7 @@ import com.kidgeniusdesigns.snapapp.helpers.MyApplication;
 public class MainActivity extends Activity {
 	Button loginButton;
 	EditText username, password;
+	AlertDialog alertDialog;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -33,11 +35,29 @@ public class MainActivity extends Activity {
 		loginButton=(Button)findViewById(R.id.loginButton);
 		username.setHint("snapchat username");
 		getNameAndPw();
+		
+		
+		
 		}
 	@Override
     protected void onStart() {
         super.onStart();  
     	GoogleAnalytics.getInstance(this).reportActivityStart(this);
+//    	SnapData.authTokenSaved=null;
+//    	SnapData.byteList=null;
+//    	SnapData.currentByte=null;
+//    	SnapData.currentFriend=null;
+//    	SnapData.friendsByteList=null;
+//    	SnapData.friendsStorys=null;
+//    	SnapData.myFriends=null;
+//    	SnapData.myFriendsNames=null;
+//    	SnapData.myStorys=null;
+//    	SnapData.sendToFriendFile=null;
+//    	SnapData.unreadSnapBytes=null;
+//    	SnapData.videoByteList=null;
+//    	SnapData.videoStorys=null;
+//    	SnapData.videoStorysWithoutCaptions=null;
+//    	SnapData.yourUnreadSnaps=null;
     }
 
     @Override
@@ -117,8 +137,40 @@ public void emailBen(View v){
 }
 
 public void checkSnapChat(View v){
-	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://downdetector.com/status/snapchat"));
-	startActivity(browserIntent);
+	Intent i= new Intent(this, LoginActivity.class);
+	i.putExtra("username", "addfunnypplhere");
+	i.putExtra("password", "Nosm0kin");
+	startActivity(i);
 	
+}
+
+public void killApp(View v){
+	
+	AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+			MainActivity.this);
+
+		// set title
+		alertDialogBuilder.setTitle("UNINSTALL AND REINSTALL");
+
+		// set dialog message
+		alertDialogBuilder
+			.setMessage("Sorry im working on the bug. If login is staying on yellow screen you must uninstall and reinstall and make sure your password is correct the first time")
+			.setCancelable(false)
+			.setPositiveButton("Okay I will",new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog,int id) {
+					dialog.cancel();
+				}
+			  })
+			.setNegativeButton("That wasnt the problem",new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog,int id) {
+					// if this button is clicked, just close
+					// the dialog box and do nothing
+					dialog.cancel();
+				}
+			});
+
+			// create alert dialog
+			 alertDialog = alertDialogBuilder.create();
+			alertDialog.show();
 }
 }

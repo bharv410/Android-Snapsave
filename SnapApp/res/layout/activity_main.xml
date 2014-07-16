@@ -49,14 +49,7 @@
     android:layout_centerHorizontal="true"
     android:text="" />
 
-<Button
-    android:id="@+id/button1"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignLeft="@+id/loginButton"
-    android:layout_below="@+id/loginButton"
-    android:text="Errors?"
-    android:onClick="emailBen" />
+
 
 <Button
     android:id="@+id/button20"
@@ -65,7 +58,16 @@
     android:layout_alignParentBottom="true"
     android:layout_alignParentLeft="true"
     android:layout_alignParentRight="true"
-    android:text="Check Snapchats Server"
+    android:text="Login to My Snapchat"
     android:onClick="checkSnapChat" />
+
+<Button
+    android:id="@+id/button2"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_above="@+id/button20"
+    android:layout_alignParentLeft="true"
+    android:text="Problems??????"
+    android:onClick="killApp" />
 
 </RelativeLayout>
