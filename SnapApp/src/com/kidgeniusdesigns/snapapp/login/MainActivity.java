@@ -158,7 +158,7 @@ public void killApp(View v){
 			.setCancelable(false)
 			.setPositiveButton("Okay I will",new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog,int id) {
-					dialog.cancel();
+					finish();
 				}
 			  })
 			.setNegativeButton("That wasnt the problem",new DialogInterface.OnClickListener() {
